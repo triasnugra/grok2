@@ -22,6 +22,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      # Buang sisa file Grok/TanStack lama yang mungkin masih ada di repo
+      # (upload lewat web GitHub tidak menghapus file lama).
+      - name: Bersihkan sisa file lama
+        run: |
+          rm -rf server migrations .tanstack .vercel .grok attachments artifacts screenshots public/__grok
+          rm -rf src/routes src/router.tsx src/routeTree.gen.ts src/lib/auth src/lib/app-data src/lib/multiplayer
+          rm -f src/lib/db.ts src/lib/env.server.ts src/lib/error-component.tsx src/lib/preview-*.ts src/components/preview-host-bridge.tsx
+          rm -f vercel.json startup.sh AGENTS.md eslint.config.mjs package-lock.json
+          find scripts -type f ! -name meja-audit.ts -delete
       - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
